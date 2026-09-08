@@ -24,16 +24,44 @@ MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.0-flash")
 _client = None  # lazy-initialised on first call
 
 
+def _get_gemini_api_key() -> str:
+    key = os.environ.get("GEMINI_API_KEY", "")
+    if not key:
+        try:
+            import streamlit as st
+            if "GEMINI_API_KEY" in st.secrets:
+                key = st.secrets["GEMINI_API_KEY"]
+        except Exception:
+            pass
+    return key
+
+
+def _get_database_url() -> str:
+    url = os.environ.get("DATABASE_URL", "")
+    if not url:
+        try:
+            import streamlit as st
+            if "DATABASE_URL" in st.secrets:
+                url = st.secrets["DATABASE_URL"]
+        except Exception:
+            pass
+    if not url:
+        raise ValueError(
+            "DATABASE_URL is not set. Please add DATABASE_URL in your Streamlit Cloud Secrets or in your local .env file."
+        )
+    return url
+
+
 def _get_client():
     """Return a Gemini client, initialising it on first use."""
     global _client
     if _client is None:
         from google import genai
-        api_key = os.environ.get("GEMINI_API_KEY", "")
+        api_key = _get_gemini_api_key()
         if not api_key:
             raise ValueError(
                 "GEMINI_API_KEY is not set. "
-                "Add it to your .env file (get a free key at https://aistudio.google.com/app/apikey)."
+                "Add it to your Streamlit Cloud Secrets or .env file (get a free key at https://aistudio.google.com/app/apikey)."
             )
         _client = genai.Client(api_key=api_key)
     return _client
@@ -88,7 +116,7 @@ def validate_sql(sql: str) -> None:
 
 
 def run_sql(sql: str, limit: int = 200):
-    conn = psycopg2.connect(os.environ["DATABASE_URL"])
+    conn = psycopg2.connect(_get_database_url())
     # Read-only, bounded-time safety net at the session level
     with conn.cursor() as cur:
         cur.execute("SET default_transaction_read_only = on;")
