@@ -1,0 +1,10 @@
+psycopg2-binary>=2.9
+pandas>=2.0
+numpy>=1.26
+Faker>=24.0
+python-dotenv>=1.0
+tqdm>=4.66
+anthropic>=0.40
+streamlit>=1.38
+plotly>=5.22
+sqlparse>=0.5
