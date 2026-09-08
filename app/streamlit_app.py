@@ -14,6 +14,23 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
+def get_database_url() -> str:
+    """Fetch DATABASE_URL from environment variables or st.secrets."""
+    url = os.environ.get("DATABASE_URL", "")
+    if not url:
+        try:
+            if "DATABASE_URL" in st.secrets:
+                url = st.secrets["DATABASE_URL"]
+        except Exception:
+            pass
+    if not url:
+        raise ValueError(
+            "DATABASE_URL is not set. Please add DATABASE_URL in your Streamlit Cloud Secrets (Settings -> Secrets) or in your local .env file."
+        )
+    return url
+
+
 from text_to_sql_agent import ask
 
 RESULTS_DIR = os.path.join(os.path.dirname(__file__), "..", "results")
@@ -225,7 +242,7 @@ def run_raw_sql(sql: str, limit: int = 500):
 @st.cache_data(ttl=60)
 def get_schema():
     """Fetch all user tables with columns, types, pk/fk flags, and row counts."""
-    conn = psycopg2.connect(os.environ["DATABASE_URL"])
+    conn = psycopg2.connect(get_database_url())
     try:
         with conn.cursor(cursor_factory=RealDictCursor) as cur:
             # Columns + PK info
@@ -298,7 +315,7 @@ def get_schema():
 
 def get_table_preview(table_name: str, limit: int = 5):
     """Fetch the first N rows of a table as a DataFrame."""
-    conn = psycopg2.connect(os.environ["DATABASE_URL"])
+    conn = psycopg2.connect(get_database_url())
     try:
         with conn.cursor(cursor_factory=RealDictCursor) as cur:
             cur.execute(f"SELECT * FROM {table_name} LIMIT %s", (limit,))
