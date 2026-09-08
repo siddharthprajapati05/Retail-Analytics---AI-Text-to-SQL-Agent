@@ -222,7 +222,7 @@ def run_raw_sql(sql: str, limit: int = 500):
         if re.search(rf"\b{kw}\b", sql, re.I):
             raise ValueError(f"Forbidden keyword detected: {kw.upper()}")
 
-    conn = psycopg2.connect(os.environ["DATABASE_URL"])
+    conn = psycopg2.connect(get_database_url())
     try:
         with conn.cursor() as cur:
             cur.execute("SET default_transaction_read_only = on;")
