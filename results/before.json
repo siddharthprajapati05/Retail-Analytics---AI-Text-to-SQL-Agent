@@ -1,8 +1,8 @@
 [
   {
     "query": "monthly_revenue",
-    "execution_time_ms": 2344.34,
-    "planning_time_ms": 3.58,
+    "execution_time_ms": 27268.25,
+    "planning_time_ms": 28.8,
     "seq_scans_on": [
       "order_items",
       "orders"
@@ -10,8 +10,8 @@
   },
   {
     "query": "top_sellers_last_6_months",
-    "execution_time_ms": 214.63,
-    "planning_time_ms": 0.86,
+    "execution_time_ms": 5636.38,
+    "planning_time_ms": 3.72,
     "seq_scans_on": [
       "orders",
       "order_items",
@@ -20,8 +20,8 @@
   },
   {
     "query": "top_100_customers_ltv",
-    "execution_time_ms": 1642.29,
-    "planning_time_ms": 0.21,
+    "execution_time_ms": 13726.93,
+    "planning_time_ms": 1.23,
     "seq_scans_on": [
       "order_items",
       "orders"
@@ -29,16 +29,16 @@
   },
   {
     "query": "repeat_purchase_rate",
-    "execution_time_ms": 621.92,
-    "planning_time_ms": 0.09,
+    "execution_time_ms": 2426.51,
+    "planning_time_ms": 0.29,
     "seq_scans_on": [
       "orders"
     ]
   },
   {
     "query": "avg_delivery_time_by_state",
-    "execution_time_ms": 253.38,
-    "planning_time_ms": 0.56,
+    "execution_time_ms": 1891.51,
+    "planning_time_ms": 4.88,
     "seq_scans_on": [
       "orders",
       "customers"
@@ -46,8 +46,8 @@
   },
   {
     "query": "category_revenue_trend",
-    "execution_time_ms": 1856.73,
-    "planning_time_ms": 0.68,
+    "execution_time_ms": 11678.82,
+    "planning_time_ms": 4.31,
     "seq_scans_on": [
       "order_items",
       "products",
